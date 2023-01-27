@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Trade Desk UI for Project Turing",
   "main": "./index.js",
+  "homepage": "http://bigfoe313.github.io/shoppingcart",
   "scripts": {
     "wds": "webpack-dev-server"
   },
@@ -17,15 +18,18 @@
     "css-loader": "^0.25.0",
     "json-loader": "^0.5.4",
     "jsonfile": "^2.3.1",
+    "lsof": "^0.1.0",
+    "node-sass": "^8.0.0",
     "react-bootstrap": "^0.30.0-rc.1",
     "react-dom": "^15.3.0",
-    "react-redux": "^4.4.5",
-    "react-svg-loader": "^1.0.1",
     "react-icons": "^2.2.1",
     "react-pivot": "^1.18.0",
+    "react-redux": "^4.4.5",
+    "react-svg-loader": "^1.0.1",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
-    "url-loader": "^0.5.7"
+    "url-loader": "^0.5.7",
+    "wds": "^0.13.2"
   },
   "peerDependencies": {
     "react": "^15.3.0"
@@ -47,7 +51,6 @@
     "json-loader": "^0.5.4",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
-    "node-sass": "^3.8.0",
     "require-all": "^2.0.0",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
