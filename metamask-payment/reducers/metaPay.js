@@ -10,7 +10,7 @@ const INITIAL_STATE = {
   country: ''
 }
 
-export default function metaPay(state = INITIAL_STATE, action) {
+function metaPay(state = INITIAL_STATE, action) {
   switch(action.type) {
     case 'UPDATE_USER':
       return {

@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "A react component to include if you want to enable metamask users to pay you.",
   "main": "index.js",
+  "homepage": "http://bigfoe313.github.io/shoppingcart",
   "scripts": {},
   "author": "Alex Miller",
   "license": "ISC",
   "dependencies": {
+    "gh-pages": "^5.0.0",
     "react": "latest",
     "react-bootstrap": "latest",
     "react-redux": "latest",
+    "react-scripts": "^5.0.1",
+    "save-dev": "^0.0.1-security",
     "whatwg-fetch": "^2.0.3"
   }
 }

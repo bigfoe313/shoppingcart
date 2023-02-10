@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+// const React = require('react');
 import { connect } from 'react-redux';
+// const connect = require('react-redux');
 import { FormControl, FormGroup, Button, Row, Col } from 'react-bootstrap';
+// const { FormControl, FormGroup, Button, Row, Col } = require('react-bootstrap');
 import { Promise } from 'bluebird';
+// const Promise = require('bluebird');
 import { metaPay } from '../actions/index'
+// const metaPay = require('../actions/index');
+
 
 class MetaPayComponent extends Component {
   constructor(props){
