@@ -1,5 +1,7 @@
 var path = require('path');
+//import { path } from 'path';
 var webpack = require('webpack');
+//import { webpack } from 'webpack';
 const fileName = `dist.js`;
 
 module.exports = {
