@@ -412,8 +412,14 @@ span.price {
     }
     async function payACASH() {
         let amt = $("#amount").val();
-        web3 = new Web3(Web3.givenProvider);
-        await Web3.givenProvider.enable();
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+        } else {
+          window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+        }
+        await Web3.window.ethereum.enable();
+        // web3 = new Web3(Web3.givenProvider);
+        //await Web3.givenProvider.enable();
         chainId = await web3.eth.getChainId();
         await ethereum
             .request({ method: "eth_requestAccounts" })
