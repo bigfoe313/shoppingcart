@@ -139,7 +139,7 @@ span.price {
             <input type="text" id="city" name="city" placeholder="">
             <input type="hidden" name="_next" value="https://bigfoe313.github.io/shoppingcart/index.html">
             <input type="hidden" name="_subject" value="Purchase from Fortech">
-            <input type="hidden" name="_autoresponse" value="Thank you for your purchase from Fortech. Your order ($44.99 plus $5.00 shipping cost) has been received and will be processed shortly.">
+            <input type="hidden" name="_autoresponse" value="Thank you for your purchase from Fortech. Your order (44.99 ACASH plus 5.00 ACASH shipping cost) has been received and will be processed shortly.">
             <input type="hidden" name="_template" value="table">
 
             <div class="row">
@@ -414,36 +414,36 @@ span.price {
         let amt = $("#amount").val();
         if (window.ethereum) {
             web3 = new Web3(window.ethereum);
+            await window.ethereum.send('eth_requestAccounts');
+            // web3 = new Web3(Web3.givenProvider);
+            //await Web3.givenProvider.enable();
+            chainId = await web3.eth.getChainId();
+            await ethereum
+                .request({ method: "eth_requestAccounts" })
+                .then(async (account) => {
+                    if (chainId != 1) {
+                        await changeToMain();
+                    }
+                    instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
+                    instance.methods
+                        .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
+                        .send({ from: account[0] })
+                        .on("transactionHash", function (hash) {
+                            console.log("transactionHash", hash);
+                        })
+                        .on("receipt", function (receipt) {
+                            console.log(receipt.transactionHash);
+                        })
+                        .on("confirmation", function (confirmationNumber, receipt) {
+                            console.log(confirmationNumber); console.log(receipt);
+                        })
+                        .on("error", function (error, receipt) {
+                            console.log(error);
+                        });
+                });
         } else {
           window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
         }
-        await Web3.window.ethereum.enable();
-        // web3 = new Web3(Web3.givenProvider);
-        //await Web3.givenProvider.enable();
-        chainId = await web3.eth.getChainId();
-        await ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then(async (account) => {
-                if (chainId != 1) {
-                    await changeToMain();
-                }
-                instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
-                instance.methods
-                    .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
-                    .send({ from: account[0] })
-                    .on("transactionHash", function (hash) {
-                        console.log("transactionHash", hash);
-                    })
-                    .on("receipt", function (receipt) {
-                        console.log(receipt.transactionHash);
-                    })
-                    .on("confirmation", function (confirmationNumber, receipt) {
-                        console.log(confirmationNumber); console.log(receipt);
-                    })
-                    .on("error", function (error, receipt) {
-                        console.log(error);
-                    });
-            });
     }
 /*
     async function payBNB() {
