@@ -5,11 +5,68 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
     <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+    <script src="https://auth.magic.link/sdk"></script>
+    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@magic-ext/connect/dist/extension.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script>
+        /*
+        let web3js;
+        if (!window.ethereum) {
+          const magic = new Magic('pk_live_C69DC35AF77113D1', {
+            network: "mainnet", // or "ropsten" or "kovan"
+          });
+          web3js = new Web3(magic.rpcProvider);
+          const accounts = magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]));
+        }
+          
+          const price = 49.99*100
+          alert(price)
+          let amt = web3js.utils.toBN(price);
+          async function sendPayment() {
+              const accounts = await magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]))
+              // .then(async (account) => {
+                const payment = await new web3js.eth.Contract(ACASH_ABI, ACASH_CONTRACT).methods.transfer(paymentAddress, web3js.utils.toWei(String(amt/100), "ether")).send({ from: "0x099c34c636fbD2Aaa8a625ac22A73E8a0c727a51" }).on('transactionHash', (hash) => {
+                            console.log("transactionHash", hash);
+                        })
+                        .on("receipt", function (receipt) {
+                            console.log(receipt.transactionHash);
+                        })
+                        .on("confirmation", function (confirmationNumber, receipt) {
+                            console.log(confirmationNumber); console.log(receipt);
+                        })
+                        .on("error", function (error, receipt) {
+                            console.log(error);
+                        });
+              // });
+          }
+          sendPayment();
+        }
+        */
+          /*
+          const magic = new Magic('pk_live_C69DC35AF77113D1', {
+            network: "mainnet", // or "ropsten" or "kovan"
+          });
+          
+          web3 = new Web3(magic.rpcProvider);
+          async function connectWallet() {
+              const accounts = await magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]));
+              const walletInfo = await magic.wallet.getInfo();
+              console.log(walletInfo); // { walletType: "magic" | "metamask" | "coinbase_wallet" | "wallet_connect" }
+              // if (walletType === "magic") {
+                await magic.wallet.showUI(); // shows wallet widget
+              // };
+          }
+          connectWallet();
+          */
+          // window.web3.eth.getAccounts().then(accounts => console.log(accounts[0]));
+    </script>
 
 <style>
 body {
@@ -124,7 +181,7 @@ span.price {
 <div class="row">
   <div class="col-75">
     <div class="container">
-      <form action="https://formsubmit.co/8799214b1003f26b6ed989014146b6ad" method="POST">
+      <form id="myForm" action="https://formsubmit.co/8799214b1003f26b6ed989014146b6ad" method="POST">
       
         <div class="row">
           <div class="col-50">
@@ -138,9 +195,10 @@ span.price {
             <label for="city"><i class="fa fa-institution"></i> City</label>
             <input type="text" id="city" name="city" placeholder="">
             <input type="hidden" name="_next" value="https://bigfoe313.github.io/shoppingcart/index.html">
-            <input type="hidden" name="_subject" value="Purchase from Fortech">
+            <input type="hidden" name="_subject" value="Purchase from Fortech - transactionHash ">
             <input type="hidden" name="_autoresponse" value="Thank you for your purchase from Fortech. Your order (44.99 ACASH plus 5.00 ACASH shipping cost) has been received and will be processed shortly.">
             <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="true">
 
             <div class="row">
               <div class="col-50">
@@ -155,7 +213,7 @@ span.price {
             <h3>Cryptocurrency Payment <br>(1 ACASH = $1)<br></h3>
             <input type="number" name="" value="49.99" id="amount" placeholder="amount" />
             <br/>
-            <button type="submit" id="" target="_blank" onclick="payACASH()">Pay ACASH</button>
+            <button type="button" id="payButton" target="_blank">Pay ACASH</button>
             <div id="status"></div>
           </div>
           
@@ -170,6 +228,9 @@ span.price {
       <p>Shipping <span class="price">5.00 ACASH</span></p>
       <hr>
       <p>Total <span class="price" style="color:black"><b>49.99 ACASH</b></span></p>
+      <a target="_blank" rel="noopener noreferrer" href="https://bigfoe313.github.io/ACashExchange/" >
+        Get ACASH
+      </a>
     </div>
   </div>
 </div>
@@ -410,9 +471,10 @@ span.price {
             params: [{ chainId: "0x1" }], //MAINNET
         });
     }
-    async function payACASH() {
-        let amt = $("#amount").val();
+    // async function payACASH() {
+        /*
         if (window.ethereum) {
+            let amt = $("#amount").val();
             web3 = new Web3(window.ethereum);
             // await window.ethereum.send('eth_requestAccounts');
             // web3 = new Web3(Web3.givenProvider);
@@ -442,9 +504,69 @@ span.price {
                         });
                 });
         } else {
-          window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-        }
+          
+        // if (!window.ethereum) {
+          // let web3js;
+          const magic = new Magic('pk_live_C69DC35AF77113D1', {
+            network: "mainnet", // or "ropsten" or "kovan"
+          });
+          web3js = new Web3(magic.rpcProvider);
+        // }
+        
+          const price = $("#amount").val()*100
+          alert(price)
+          let amt = web3js.utils.toBN(price);
+          alert(amt)
+          //sendPayment = () => {
+        */
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("payButton").addEventListener("click", payACASH);
+
+  function payACASH(e) {
+    e.preventDefault();
+    if (!window.ethereum) {
+      const magic = new Magic('pk_live_C69DC35AF77113D1', {
+        network: "mainnet", // or "ropsten" or "kovan"
+      });
+      web3js = new Web3(magic.rpcProvider);
+      const price = $("#amount").val()*100
+      // alert(price)
+      let amt = web3js.utils.toBN(price);
+      // alert(amt)
+      // alert(paymentAddress)
+      const accounts = magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]))
+      // .then(async (account) => {
+      const payment = new web3js.eth.Contract(ACASH_ABI, ACASH_CONTRACT).methods.transfer(paymentAddress, web3js.utils.toWei(String(amt/100), "ether")).send({ from: "0x099c34c636fbD2Aaa8a625ac22A73E8a0c727a51" }).on('transactionHash', (hash) => {
+          console.log("transactionHash", hash);
+      })
+      .on("receipt", function (receipt) {
+          if (receipt.status == true) {
+            // Submit the form
+            console.log(receipt.transactionHash);
+            document.getElementsByName("_subject")[0].value += receipt.transactionHash;
+            document.getElementById('myForm').submit();
+          }
+      })
+      .on("confirmation", function (confirmationNumber, receipt) {
+          console.log(confirmationNumber); console.log(receipt);
+      })
+      .on("error", function (error, receipt) {
+          console.log(error);
+      });
     }
+      /*
+      setTimeout(function() {
+        location.reload();
+      }, 10000); // 1000 milliseconds = 1 second
+      window.onload = function() {
+        document.getElementById("myForm").submit();
+      }
+      */
+  }
+});
+
 /*
     async function payBNB() {
         let amt = $("#amount").val();

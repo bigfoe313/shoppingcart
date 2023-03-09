@@ -8,7 +8,9 @@
   "author": "Alex Miller",
   "license": "ISC",
   "dependencies": {
+    "@magic-ext/connect": "^6.5.0",
     "gh-pages": "^5.0.0",
+    "magic-sdk": "^13.4.0",
     "react": "latest",
     "react-bootstrap": "latest",
     "react-redux": "latest",
