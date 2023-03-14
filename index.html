@@ -200,7 +200,7 @@ span.price {
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="true">
 
-            <div class="row">
+            <div class="row" style="display: inline-block;">
               <div class="col-50">
                 <label for="state">State</label>
                 <input type="text" id="state" name="state" placeholder="">
@@ -211,10 +211,10 @@ span.price {
               </div>
             </div>
             <h3>Cryptocurrency Payment <br>(1 ACASH = $1)<br></h3>
-            <input type="number" name="" value="49.99" id="amount" placeholder="amount" />
+            <input type="number" name="" value="49.99" id="amount" placeholder="amount" disabled />
             <br/>
             <br/>
-            <button type="button" id="payButton" target="_blank">Pay ACASH</button>
+            <button type="button" id="payButton" target="_blank">Pay ACASH</button><span>  Receipt emailed</span>
             <div id="status"></div>
           </div>
           
@@ -226,7 +226,7 @@ span.price {
     <div class="container">
       <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b></b></span></h4>
       <p>Fortech Specs <span class="price">44.99 ACASH</span></p>
-      <p>Shipping <span class="price">5.00 ACASH</span></p>
+      <p>Shipping (Standard)<span class="price">5.00 ACASH</span></p>
       <hr>
       <p>Total <span class="price" style="color:black"><b>49.99 ACASH</b></span></p>
       <a target="_blank" rel="noopener noreferrer" href="https://bigfoe313.github.io/ACashExchange/" >
