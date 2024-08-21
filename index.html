@@ -16,6 +16,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@magic-ext/connect/dist/extension.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
+
+let elements = document.getElementsByClassName("price");
+for (let i = 0; i < elements.length; i++) {
+  console.log(elements[i].value);
+}
+
         /*
         let web3js;
         if (!window.ethereum) {
@@ -26,7 +32,7 @@
           const accounts = magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]));
         }
           
-          const price = 49.99*100
+          const price = 52.34*100
           alert(price)
           let amt = web3js.utils.toBN(price);
           async function sendPayment() {
@@ -135,12 +141,12 @@ label {
 }
 
 .btn {
-  background-color: #04AA6D;
+  background-color: #008CBA;
   color: white;
-  padding: 12px;
-  margin: 10px 0;
+  padding: 6px;
+  margin: 5px 0;
   border: none;
-  width: 100%;
+  width: 115px;
   border-radius: 3px;
   cursor: pointer;
   font-size: 17px;
@@ -195,8 +201,8 @@ span.price {
             <label for="city"><i class="fa fa-institution"></i> City</label>
             <input type="text" id="city" name="city" placeholder="">
             <input type="hidden" name="_next" value="https://bigfoe313.github.io/shoppingcart/index.html">
-            <input type="hidden" name="_subject" value="Purchase from Fortech - transactionHash ">
-            <input type="hidden" name="_autoresponse" value="Thank you for your purchase from Fortech. Your order (44.99 A-CASH plus 5.00 A-CASH shipping cost) has been received and will be processed shortly.">
+            <input type="hidden" name="_subject" value="Purchase from Fortech (Fortech Specs Dark Tint) - transactionHash ">
+            <input type="hidden" name="_autoresponse" value="Thank you for your purchase from Fortech. Your order (44.99 A-CASH plus 7.35 A-CASH shipping cost) has been received and will be processed shortly.">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="true">
 
@@ -211,10 +217,9 @@ span.price {
               </div>
             </div>
             <h3>Cryptocurrency Payment <br>(1 A-CASH = $1)<br></h3>
-            <input type="number" name="" value="49.99" id="amount" placeholder="amount" disabled />
+            <input type="number" name="total" value="52.34" id="amount" placeholder="amount" disabled />
             <br/>
-            <br/>
-            <button type="button" id="payButton" target="_blank">Pay A-CASH</button><span>  Receipt emailed</span>
+            <button type="button" id="payButton" target="_blank" class="btn">Pay A-CASH</button><span>  Receipt emailed</span>
             <div id="status"></div>
           </div>
           
@@ -225,10 +230,11 @@ span.price {
   <div class="col-25">
     <div class="container">
       <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b></b></span></h4>
-      <p>Fortech Specs <span class="price">44.99 A-CASH</span></p>
-      <p>Shipping (Standard)<span class="price">5.00 A-CASH</span></p>
+      <p id="paragraph1">Fortech Specs <span class="price" id="span1">44.99 A-CASH</span></p>
+      <p>Shipping<span class="price" id="span2">7.35 A-CASH</span></p>
+      <span id="span3">(10-20 Days)</span>
       <hr>
-      <p>Total <span class="price" style="color:black"><b>49.99 A-CASH</b></span></p>
+      <p>Total <span class="price" id="span4" style="color:black"><b>52.34 A-CASH</b></span></p>
       <a target="_blank" rel="noopener noreferrer" href="https://bigfoe313.github.io/ACashExchange/" >
         Get A-CASH
       </a>
@@ -238,290 +244,156 @@ span.price {
 
 </body>
 <script>
-    const paymentAddress = "0xD87af162d1b74F628faE4b592Fe5D5f56E0ca630"; //Your wallet address to rec payment
-    const ACASH_CONTRACT = "0xE409011F25cF9eEe516f2922fc400698b9E46A29"; //ACASH CONTRACT Address 
+    const paymentAddress = "0xD87af162d1b74F628faE4b592Fe5D5f56E0ca630"; // Your wallet address to receive payment
+    const ACASH_CONTRACT = "0xE409011F25cF9eEe516f2922fc400698b9E46A29"; // ACASH CONTRACT Address 
     const ACASH_ABI = [
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "name",
-        "outputs": [
-          {
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "totalSupply",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint8"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
-          {
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "",
-            "type": "address"
-          },
-          {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "name": "allowance",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_owner",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_spender",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Approval",
-        "type": "event"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "transfer",
-        "outputs": [
-          {
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_spender",
-            "type": "address"
-          },
-          {
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "approve",
-        "outputs": [
-          {
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "transferFrom",
-        "outputs": [
-          {
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      }
-    ]; //A-CASH CONTRACT ABI  
+        // Add the rest of the ABI here...
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ]; // ACASH CONTRACT ABI  
+
     var web3 = null;
     var instance = null;
     var chainId = null;
+
     async function changeToMain() {
         await ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x1" }], //MAINNET
+            params: [{ chainId: "0x1" }], // MAINNET
         });
     }
-    // async function payACASH() {
-        /*
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Loop through all input fields in the form
+        document.querySelectorAll('input').forEach(input => {
+            const paramValue = urlParams.get(input.name); // Match the input name with URL parameter
+            if (paramValue) {
+                input.value = paramValue; // Set the input value
+            }
+        });
+    });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Function to get URL parameters
+  function getURLParams() {
+    const params = new URLSearchParams(window.location.search);
+    
+    // Iterate over each pair
+    for (let i = 1; i <= 3; i++) {
+      const pText = params.get(`p${i}`);
+      const spanText = params.get(`span${i}`);
+      
+      // Update the corresponding paragraph and span
+      if (pText) {
+        document.getElementById(`paragraph${i}`).firstChild.textContent = pText + ' ';
+      }
+      if (spanText) {
+        document.getElementById(`span${i}`).textContent = spanText;
+      }
+    }
+  }
+
+  // Call the function to set the content
+  getURLParams();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("payButton").addEventListener("click", payACASH);
+
+    async function payACASH() {
+  window.web3 = new Web3(window.ethereum);
+  await window.ethereum.enable();
         if (window.ethereum) {
-            let amt = $("#amount").val();
-            web3 = new Web3(window.ethereum);
-            // await window.ethereum.send('eth_requestAccounts');
-            // web3 = new Web3(Web3.givenProvider);
-            //await Web3.givenProvider.enable();
-            chainId = await web3.eth.getChainId();
-            await ethereum
-                .request({ method: "eth_requestAccounts" })
-                .then(async (account) => {
-                    if (chainId != 1) {
-                        await changeToMain();
-                    }
-                    instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
-                    instance.methods
-                        .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
-                        .send({ from: account[0] })
-                        .on("transactionHash", function (hash) {
-                            console.log("transactionHash", hash);
-                        })
-                        .on("receipt", function (receipt) {
-                            console.log(receipt.transactionHash);
-                        })
-                        .on("confirmation", function (confirmationNumber, receipt) {
-                            console.log(confirmationNumber); console.log(receipt);
-                        })
-                        .on("error", function (error, receipt) {
-                            console.log(error);
-                        });
-                });
+        console.log('Ethereum object:', window.ethereum);
+            let amt = document.getElementById("amount").value;
+            //window.web3 = new Web3(window.ethereum);
+            //await window.ethereum.enable();
+
+            try {
+                // Request account access
+                const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+
+                // Get the current chain ID
+                chainId = await web3.eth.getChainId();
+
+                // If the current chain is not Ethereum Mainnet, switch to it
+                if (chainId != 1) {
+                    await changeToMain();
+                }
+
+                // Create the contract instance
+                instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
+
+                // Perform the transfer
+                instance.methods
+                    .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
+                    .send({ from: accounts[0] })
+                    .on("transactionHash", async function (hash) {
+                        console.log("Transaction hash:", hash);
+
+                        // Polling for the receipt
+                        let receipt = null;
+                        while (receipt === null) {
+                            receipt = await web3.eth.getTransactionReceipt(hash);
+                            await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay
+                        }
+
+                        if (receipt.status) {
+                            console.log("Transaction successful:", receipt.transactionHash);
+                            document.getElementsByName("_subject")[0].value += receipt.transactionHash;
+                            document.getElementById('myForm').submit();
+                        } else {
+                            console.log("Transaction failed.");
+                        }
+                    })
+                    .on("error", function (error, receipt) {
+                        console.error("Error during transaction:", error);
+                        if (receipt) {
+                            console.error("Receipt on error:", receipt);
+                        }
+                    });
+
+            } catch (error) {
+                console.error("Error accessing accounts or performing transaction:", error);
+            }
         } else {
-          
-        // if (!window.ethereum) {
-          // let web3js;
-          const magic = new Magic('pk_live_C69DC35AF77113D1', {
-            network: "mainnet", // or "ropsten" or "kovan"
-          });
-          web3js = new Web3(magic.rpcProvider);
-        // }
-        
-          const price = $("#amount").val()*100
-          alert(price)
-          let amt = web3js.utils.toBN(price);
-          alert(amt)
-          //sendPayment = () => {
-        */
+            // If MetaMask is not installed, alert the user
+            alert("MetaMask is not installed. Please install MetaMask and try again.");
+        }
+    }
+})
 </script>
 <script>
+/*
 document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("payButton").addEventListener("click", payACASH);
 
@@ -537,9 +409,9 @@ document.addEventListener("DOMContentLoaded", function() {
       let amt = web3js.utils.toBN(price);
       // alert(amt)
       // alert(paymentAddress)
-      const accounts = magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]))
-      // .then(async (account) => {
-      const payment = new web3js.eth.Contract(ACASH_ABI, ACASH_CONTRACT).methods.transfer(paymentAddress, web3js.utils.toWei(String(amt/100), "ether")).send({ from: "0x099c34c636fbD2Aaa8a625ac22A73E8a0c727a51" }).on('transactionHash', (hash) => {
+      magic.wallet.connectWithUI().then(async (accounts) => {
+      const account = accounts[0]
+      const payment = new web3js.eth.Contract(ACASH_ABI, ACASH_CONTRACT).methods.transfer(paymentAddress, web3js.utils.toWei(String(amt/100), "ether")).send({ from: account }).on('transactionHash', (hash) => {
           console.log("transactionHash", hash);
       })
       .on("receipt", function (receipt) {
@@ -556,6 +428,7 @@ document.addEventListener("DOMContentLoaded", function() {
       .on("error", function (error, receipt) {
           console.log(error);
       });
+      });
     }
       /*
       setTimeout(function() {
@@ -564,9 +437,10 @@ document.addEventListener("DOMContentLoaded", function() {
       window.onload = function() {
         document.getElementById("myForm").submit();
       }
-      */
+      
   }
 });
+*/
 
 /*
     async function payBNB() {
