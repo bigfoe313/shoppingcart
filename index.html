@@ -266,24 +266,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
+    const cartHeader = document.getElementById("cartHeader");
 
-  const cartImage = params.get("cartImage");
-  const cartTitle = params.get("cartTitle") || "Cart";
-  const cartProductId = params.get("cartProductId") || "";
-  const cartColor = params.get("cartColor") || "";
+    const title = params.get("cartTitle");
+    const productId = params.get("cartProductId");
+    const color = params.get("cartColor");
+    const imageUrl = params.get("cartImage");
 
-  // Update the cart header <span><b></b></span>
-  const cartHeader = document.querySelector('.price b');
-  if (cartHeader) {
-    // Insert image + text
-    cartHeader.innerHTML = `
-      ${cartTitle} 
-      ${cartProductId ? `(${cartProductId})` : ""} 
-      ${cartColor ? `- ${cartColor}` : ""} 
-      ${cartImage ? `<img src="${cartImage}" style="height:24px; margin-left:5px;" />` : ""}
-    `;
-  }
+    if (cartHeader) {
+        let headerText = "Cart";
+        if (title) headerText += ` - ${title}`;
+        if (productId) headerText += ` (ID: ${productId})`;
+        if (color) headerText += ` - ${color}`;
+        cartHeader.innerHTML = headerText + 
+            (imageUrl ? ` <img src="${imageUrl}" style="height:24px; margin-left:5px; vertical-align:middle;" />` : "") +
+            cartHeader.querySelector(".price").outerHTML; // keep the total price intact
+    }
 });
 </script>
     
