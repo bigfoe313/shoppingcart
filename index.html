@@ -243,6 +243,27 @@ span.price {
 </div>
 
 </body>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Parse query string from URL
+  const params = new URLSearchParams(window.location.search);
+
+  const title = params.get("cartTitle");
+  const productId = params.get("cartProductId");
+  const color = params.get("cartColor");
+
+  const headerEl = document.querySelector("h4");
+  if (headerEl && (title || productId || color)) {
+    headerEl.innerHTML = `
+      ${title ? `<strong>${title}</strong>` : ""}
+      ${productId ? ` <span style="font-size:0.85em;color:#555;">(ID: ${productId})</span>` : ""}
+      ${color ? ` <span style="font-size:0.85em;color:#777;">Color: ${color}</span>` : ""}
+    `;
+  }
+});
+</script>
+    
 <script>
     const paymentAddress = "0xD87af162d1b74F628faE4b592Fe5D5f56E0ca630"; // Your wallet address to receive payment
     const ACASH_CONTRACT = "0xE409011F25cF9eEe516f2922fc400698b9E46A29"; // ACASH CONTRACT Address 
