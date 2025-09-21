@@ -392,6 +392,23 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 })
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const cartTitle = document.getElementById("cartTitle");
+
+  // Check if product title, id, and color were passed from URL (Metamask redirect)
+  const productTitle = urlParams.get("title");
+  const productId = urlParams.get("productId");
+  const productColor = urlParams.get("color");
+
+  if (productTitle || productId || productColor) {
+    cartTitle.textContent = `${productTitle ?? ""} ${productId ?? ""} ${productColor ?? ""}`.trim();
+  }
+});
+</script>
+    
 <script>
 /*
 document.addEventListener("DOMContentLoaded", function() {
