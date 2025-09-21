@@ -263,6 +263,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  const cartImage = params.get("cartImage");
+  const cartTitle = params.get("cartTitle") || "Cart";
+  const cartProductId = params.get("cartProductId") || "";
+  const cartColor = params.get("cartColor") || "";
+
+  // Update the cart header <span><b></b></span>
+  const cartHeader = document.querySelector('.price b');
+  if (cartHeader) {
+    // Insert image + text
+    cartHeader.innerHTML = `
+      ${cartTitle} 
+      ${cartProductId ? `(${cartProductId})` : ""} 
+      ${cartColor ? `- ${cartColor}` : ""} 
+      ${cartImage ? `<img src="${cartImage}" style="height:24px; margin-left:5px;" />` : ""}
+    `;
+  }
+});
+</script>
     
 <script>
     const paymentAddress = "0xD87af162d1b74F628faE4b592Fe5D5f56E0ca630"; // Your wallet address to receive payment
