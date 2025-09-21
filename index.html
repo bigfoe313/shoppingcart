@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (headerEl && (title || productId || color)) {
     headerEl.innerHTML = `
       ${title ? `<strong>${title}</strong>` : ""}
-      ${productId ? ` <span style="font-size:0.85em;color:#555;">(ID: ${productId})</span>` : ""}
+      ${productId ? ` <span style="font-size:0.85em;color:#555;"> ${productId}</span>` : ""}
       ${color ? ` <span style="font-size:0.85em;color:#777;">Color: ${color}</span>` : ""}
     `;
   }
