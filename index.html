@@ -246,43 +246,26 @@ span.price {
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // Parse query string from URL
   const params = new URLSearchParams(window.location.search);
+  const cartHeader = document.getElementById("cartHeader");
+  const priceSpan = cartHeader.querySelector(".price");
 
   const title = params.get("cartTitle");
   const productId = params.get("cartProductId");
   const color = params.get("cartColor");
+  const imageUrl = params.get("cartImage");
 
-  const headerEl = document.querySelector("h4");
-  if (headerEl && (title || productId || color)) {
-    headerEl.innerHTML = `
-      ${title ? `<strong>${title}</strong>` : ""}
-      ${productId ? ` <span style="font-size:0.85em;color:#555;"> ${productId}</span>` : ""}
-      ${color ? ` <span style="font-size:0.85em;color:#777;">Color: ${color}</span>` : ""}
-    `;
+  if (cartHeader) {
+    let html = `<span>Cart</span>`;
+    if (title) html += ` - <strong>${title}</strong>`;
+    if (productId) html += ` <span style="font-size:0.85em;color:#555;">${productId}</span>`;
+    if (color) html += ` <span style="font-size:0.85em;color:#777;">Color: ${color}</span>`;
+    if (imageUrl) html += ` <img src="${imageUrl}" style="height:24px; margin-left:5px; vertical-align:middle;" />`;
+
+    // Re-attach the price span at the end
+    html += priceSpan.outerHTML;
+    cartHeader.innerHTML = html;
   }
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    const cartHeader = document.getElementById("cartHeader");
-
-    const title = params.get("cartTitle");
-    const productId = params.get("cartProductId");
-    const color = params.get("cartColor");
-    const imageUrl = params.get("cartImage");
-
-    if (cartHeader) {
-        let headerText = "Cart";
-        if (title) headerText += ` - ${title}`;
-        if (productId) headerText += ` (ID: ${productId})`;
-        if (color) headerText += ` - ${color}`;
-        cartHeader.innerHTML = headerText + 
-            (imageUrl ? ` <img src="${imageUrl}" style="height:24px; margin-left:5px; vertical-align:middle;" />` : "") +
-            cartHeader.querySelector(".price").outerHTML; // keep the total price intact
-    }
 });
 </script>
     
