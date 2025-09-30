@@ -243,7 +243,7 @@ span.price {
 </div>
 
 </body>
-
+/*
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
@@ -267,6 +267,50 @@ document.addEventListener("DOMContentLoaded", () => {
     cartHeader.innerHTML = html;
   }
 });
+</script>
+*/
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+
+    const cartTitle = params.get("cartTitle");
+    const cartProductId = params.get("cartProductId");
+    const cartColor = params.get("cartColor");
+    const cartImage = params.get("cartImage");
+    const span1 = params.get("span1");
+    const span2 = params.get("span2");
+    const span3 = params.get("span3");
+    const span4 = params.get("span4");
+    const total = params.get("total");
+
+    // Debug log
+    console.log("Cart Image URL:", cartImage);
+
+    const cartHeader = document.getElementById("cartHeader");
+    let html = `<h4>Cart</h4>`;
+
+    // Show product image cleanly below header
+    if (cartImage) {
+      html += `
+        <div style="margin:10px 0; text-align:center;">
+          <img src="${cartImage}" 
+               alt="Product Image" 
+               style="max-width:200px; height:auto; border-radius:8px; display:inline-block;" />
+        </div>`;
+    }
+
+    if (cartTitle) html += `<p><strong>Title:</strong> ${cartTitle}</p>`;
+    if (cartProductId) html += `<p><strong>Product ID:</strong> ${cartProductId}</p>`;
+    if (cartColor) html += `<p><strong>Color:</strong> ${cartColor}</p>`;
+    if (span1) html += `<p><strong>Discount:</strong> ${span1}</p>`;
+    if (span2) html += `<p><strong>Shipping:</strong> ${span2}</p>`;
+    if (span3) html += `<p><strong>Delivery:</strong> ${span3}</p>`;
+    if (span4) html += `<p><strong>Total:</strong> ${span4}</p>`;
+    if (total) html += `<p><strong>Final Total:</strong> ${total} A-CASH</p>`;
+
+    cartHeader.innerHTML = html;
+  });
 </script>
     
 <script>
