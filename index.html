@@ -229,7 +229,7 @@ span.price {
   </div>
   <div class="col-25">
     <div class="container">
-      <h4 id="cartHeader"><span id="cartTitle">Cart</span><span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b></b></span></h4>
+      <h4 id="cartHeader"><span id="cartTitle">Cart</span><span class="price" style="color:black"><b></b></span></h4>
       <p id="paragraph1">Price <span class="price" id="span1">44.99 A-CASH</span></p>
       <p>Shipping<span class="price" id="span2">7.35 A-CASH</span></p>
       <span id="span3">(10-20 Days)</span>
@@ -256,8 +256,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const imageUrl = params.get("cartImage");
 
   if (cartHeader) {
-    let html = `<span>Cart</span>`;
-    if (title) html += ` - <strong>${title}</strong>`;
+    let html = `<span></span>`;
+    if (title) html += `<strong>${title}</strong>`;
     if (productId) html += ` <span style="font-size:0.85em;color:#555;">${productId}</span>`;
     if (color) html += ` <span style="font-size:0.85em;color:#777;"> ${color}</span>`;
     if (imageUrl) html += ` <img src="${imageUrl}" style="max-width:100%; height:auto; border-radius:8px;" />`;
