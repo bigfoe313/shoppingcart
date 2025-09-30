@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let html = `<span>Cart</span>`;
     if (title) html += ` - <strong>${title}</strong>`;
     if (productId) html += ` <span style="font-size:0.85em;color:#555;">${productId}</span>`;
-    if (color) html += ` <span style="font-size:0.85em;color:#777;">Color: ${color}</span>`;
+    if (color) html += ` <span style="font-size:0.85em;color:#777;"> ${color}</span>`;
     if (imageUrl) html += ` <img src="${imageUrl}" style="max-width:100%; height:auto; border-radius:8px;" />`;
 
     // Re-attach the price span at the end
