@@ -143,13 +143,14 @@ label {
 .btn {
   background-color: #008CBA;
   color: white;
-  padding: 6px;
+  padding: 8px;
   margin: 5px 0;
   border: none;
-  width: 115px;
-  border-radius: 3px;
+  width: 100px; /* fits "Pay A-CASH" on one line */
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 14px;
+  white-space: nowrap; /* prevents text wrapping */
 }
 
 .btn:hover {
@@ -217,7 +218,7 @@ span.price {
               </div>
             </div>
             <h3>Cryptocurrency Payment <br>(1 A-CASH = $1)<br></h3>
-            <input type="number" name="total" value="52.34" id="amount" placeholder="amount" disabled />
+            <input type="number" name="total" value="52.34" id="amount" placeholder="amount" disabled style="width: 100px; font-size: 17px;" />
             <br/>
             <button type="button" id="payButton" target="_blank" class="btn">Pay A-CASH</button><span>  Receipt emailed</span>
             <div id="status"></div>
@@ -234,7 +235,7 @@ span.price {
       <p>Shipping<span class="price" id="span2">7.35 A-CASH</span></p>
       <span id="span3">(10-20 Days)</span>
       <hr>
-      <p>Total <span class="price" id="span4" style="color:black"><b>52.34 A-CASH</b></span></p>
+      <p>Total <span class="price" id="span4" style="color:black;"><b>52.34 A-CASH</b></span></p>
       <a href="https://metamask.app.link/dapp/bigfoe313.github.io/ACashExchange/" target="_blank" >
         Get A-CASH
       </a>
