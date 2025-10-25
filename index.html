@@ -392,34 +392,14 @@ document.addEventListener("DOMContentLoaded", function() {
         .on("transactionHash", async function (hash) {
           console.log("Transaction hash:", hash);
 
-          // Update subject line before submitting the form
+          // --- Update subject line to include Product ID ---
           const subjectInput = document.getElementsByName("_subject")[0];
-          subjectInput.value = `Purchase from A-Cash Marketplace - transactionHash = ${hash}`;
+          subjectInput.value = `Purchase from A-Cash Marketplace - transactionHash = ${hash} | Product ID = ${productId}`;
 
-          // Submit the form
+          // --- Submit seller notification form ---
           document.getElementById("myForm").submit();
 
-          // --- Send confirmation email to customer ---
-          const bodyHTML = `
-            <p>Thank you for your purchase from <b>acashmarketplace.com</b>.</p>
-            <p>Your order (<b>${priceText}</b> plus <b>${shippingText}</b> shipping cost) has been received and will be processed shortly.</p>
-            <hr>
-            <p><img src="${productImage}" style="max-width:200px;border-radius:8px;" alt="Product Image"></p>
-            <p><b>${productTitle}</b></p>
-            <p>Product ID: ${productId}</p>
-          `;
-
-          // Send email via FormSubmit using fetch
-          await fetch("https://formsubmit.co/ajax/38fd9c02be2d3bdacaa56cc69ec2d108", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email,
-              _subject: "Order Received from A-Cash Marketplace",
-              message: bodyHTML,
-            }),
-          }).then((res) => console.log("Email sent:", res.status))
-            .catch((err) => console.error("Email failed:", err));
+          // Removed buyer confirmation email entirely
         })
         .on("error", function (error) {
           console.error("Transaction error:", error);
