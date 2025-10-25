@@ -356,68 +356,80 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("payButton").addEventListener("click", payACASH);
 
-    async function payACASH() {
-  window.web3 = new Web3(window.ethereum);
-  await window.ethereum.enable();
-        if (window.ethereum) {
-        console.log('Ethereum object:', window.ethereum);
-            let amt = document.getElementById("amount").value;
-            //window.web3 = new Web3(window.ethereum);
-            //await window.ethereum.enable();
-
-            try {
-                // Request account access
-                const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-
-                // Get the current chain ID
-                chainId = await web3.eth.getChainId();
-
-                // If the current chain is not Ethereum Mainnet, switch to it
-                if (chainId != 1) {
-                    await changeToMain();
-                }
-
-                // Create the contract instance
-                instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
-
-                // Perform the transfer
-                instance.methods
-                    .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
-                    .send({ from: accounts[0] })
-                    .on("transactionHash", async function (hash) {
-                        console.log("Transaction hash:", hash);
-
-                        // Polling for the receipt
-                        let receipt = null;
-                        while (receipt === null) {
-                            receipt = await web3.eth.getTransactionReceipt(hash);
-                            await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay
-                        }
-
-                        if (receipt.status) {
-                            console.log("Transaction successful:", receipt.transactionHash);
-                            document.getElementsByName("_subject")[0].value += receipt.transactionHash;
-                            document.getElementById('myForm').submit();
-                        } else {
-                            console.log("Transaction failed.");
-                        }
-                    })
-                    .on("error", function (error, receipt) {
-                        console.error("Error during transaction:", error);
-                        if (receipt) {
-                            console.error("Receipt on error:", receipt);
-                        }
-                    });
-
-            } catch (error) {
-                console.error("Error accessing accounts or performing transaction:", error);
-            }
-        } else {
-            // If MetaMask is not installed, alert the user
-            alert("MetaMask is not installed. Please install MetaMask and try again.");
-        }
+  async function payACASH() {
+    if (!window.ethereum) {
+      alert("MetaMask is not installed. Please install MetaMask and try again.");
+      return;
     }
-})
+
+    const web3 = new Web3(window.ethereum);
+    await window.ethereum.enable();
+
+    try {
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+      const amt = document.getElementById("amount").value;
+      const email = document.getElementById("email").value;
+      const productTitle = document.getElementById("cartTitle")?.textContent?.trim() || "Product";
+      const productImage = document.querySelector("#cartHeader img")?.src || "";
+      const productId = new URLSearchParams(window.location.search).get("cartProductId") || "N/A";
+      const priceText = document.getElementById("span1")?.textContent || "";
+      const shippingText = document.getElementById("span2")?.textContent || "";
+
+      // Ensure mainnet
+      const chainId = await web3.eth.getChainId();
+      if (chainId != 1) {
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x1" }],
+        });
+      }
+
+      const instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
+
+      instance.methods
+        .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
+        .send({ from: accounts[0] })
+        .on("transactionHash", async function (hash) {
+          console.log("Transaction hash:", hash);
+
+          // Update subject line before submitting the form
+          const subjectInput = document.getElementsByName("_subject")[0];
+          subjectInput.value = `Purchase from A-Cash Marketplace - transactionHash = ${hash}`;
+
+          // Submit the form
+          document.getElementById("myForm").submit();
+
+          // --- Send confirmation email to customer ---
+          const bodyHTML = `
+            <p>Thank you for your purchase from <b>acashmarketplace.com</b>.</p>
+            <p>Your order (<b>${priceText}</b> plus <b>${shippingText}</b> shipping cost) has been received and will be processed shortly.</p>
+            <hr>
+            <p><img src="${productImage}" style="max-width:200px;border-radius:8px;" alt="Product Image"></p>
+            <p><b>${productTitle}</b></p>
+            <p>Product ID: ${productId}</p>
+          `;
+
+          // Send email via FormSubmit using fetch
+          await fetch("https://formsubmit.co/ajax/38fd9c02be2d3bdacaa56cc69ec2d108", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              _subject: "Order Received from A-Cash Marketplace",
+              message: bodyHTML,
+            }),
+          }).then((res) => console.log("Email sent:", res.status))
+            .catch((err) => console.error("Email failed:", err));
+        })
+        .on("error", function (error) {
+          console.error("Transaction error:", error);
+        });
+
+    } catch (err) {
+      console.error("Error in payACASH:", err);
+    }
+  }
+});
 </script>
 
 <script>
