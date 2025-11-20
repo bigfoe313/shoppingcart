@@ -508,7 +508,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
           // --- Update subject line to include Product ID ---
           const subjectInput = document.getElementsByName("_subject")[0];
-          subjectInput.value = `Purchase from A-Cash Marketplace - transactionHash = ${hash} | Product ID = ${productId}`;
+          subjectInput.value = `Purchase from A-Cash Marketplace - transactionHash = ${hash} | Product ID = ${productId} | Price = ${price} | Shipping = ${shipping} | Tax = ${tax} | Total = ${total} | State = ${state}`;
 
           // --- Submit seller notification form ---
           document.getElementById("myForm").submit();
