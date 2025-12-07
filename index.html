@@ -1,633 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
-    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
-    <script src="https://auth.magic.link/sdk"></script>
-    <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@magic-ext/connect/dist/extension.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script>
+  <meta charset="utf-8" />
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A-CASH Checkout</title>
 
-let elements = document.getElementsByClassName("price");
-for (let i = 0; i < elements.length; i++) {
-  console.log(elements[i].value);
-}
+  <!-- Styles (kept from your original file, lightly trimmed) -->
+  <style>
+    body { font-family: Arial; font-size: 17px; padding: 8px; }
+    * { box-sizing: border-box; }
+    .row { display:flex; flex-wrap:wrap; margin:0 -16px; }
+    .col-25{flex:25%;} .col-50{flex:50%;} .col-75{flex:75%;}
+    .col-25,.col-50,.col-75{padding:0 16px;}
+    .container{background:#f2f2f2;padding:5px 20px 15px;border:1px solid lightgrey;border-radius:3px;}
+    input[type=text], input[type=number], select { width:100%; margin-bottom:20px; padding:12px; border:1px solid #ccc; border-radius:3px; }
+    label{margin-bottom:10px; display:block;}
+    .btn{ background:#008CBA;color:#fff;padding:8px;margin:5px 0;border:none;width:140px;border-radius:8px;cursor:pointer;font-size:14px; }
+    .btn:hover{ background:#45a049; }
+    span.price{ float:right; color:grey }
+    hr{ border:1px solid lightgrey; }
+    @media (max-width:800px) { .row{ flex-direction:column-reverse } .col-25{margin-bottom:20px} }
+  </style>
 
-        /*
-        let web3js;
-        if (!window.ethereum) {
-          const magic = new Magic('pk_live_C69DC35AF77113D1', {
-            network: "mainnet", // or "ropsten" or "kovan"
-          });
-          web3js = new Web3(magic.rpcProvider);
-          const accounts = magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]));
-        }
-          
-          const price = 52.34*100
-          alert(price)
-          let amt = web3js.utils.toBN(price);
-          async function sendPayment() {
-              const accounts = await magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]))
-              // .then(async (account) => {
-                const payment = await new web3js.eth.Contract(ACASH_ABI, ACASH_CONTRACT).methods.transfer(paymentAddress, web3js.utils.toWei(String(amt/100), "ether")).send({ from: "0x099c34c636fbD2Aaa8a625ac22A73E8a0c727a51" }).on('transactionHash', (hash) => {
-                            console.log("transactionHash", hash);
-                        })
-                        .on("receipt", function (receipt) {
-                            console.log(receipt.transactionHash);
-                        })
-                        .on("confirmation", function (confirmationNumber, receipt) {
-                            console.log(confirmationNumber); console.log(receipt);
-                        })
-                        .on("error", function (error, receipt) {
-                            console.log(error);
-                        });
-              // });
-          }
-          sendPayment();
-        }
-        */
-          /*
-          const magic = new Magic('pk_live_C69DC35AF77113D1', {
-            network: "mainnet", // or "ropsten" or "kovan"
-          });
-          
-          web3 = new Web3(magic.rpcProvider);
-          async function connectWallet() {
-              const accounts = await magic.wallet.connectWithUI().then(accounts => console.log(accounts[0]));
-              const walletInfo = await magic.wallet.getInfo();
-              console.log(walletInfo); // { walletType: "magic" | "metamask" | "coinbase_wallet" | "wallet_connect" }
-              // if (walletType === "magic") {
-                await magic.wallet.showUI(); // shows wallet widget
-              // };
-          }
-          connectWallet();
-          */
-          // window.web3.eth.getAccounts().then(accounts => console.log(accounts[0]));
-    </script>
-
-<style>
-body {
-  font-family: Arial;
-  font-size: 17px;
-  padding: 8px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.row {
-  display: -ms-flexbox; /* IE10 */
-  display: flex;
-  -ms-flex-wrap: wrap; /* IE10 */
-  flex-wrap: wrap;
-  margin: 0 -16px;
-}
-
-.col-25 {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
-}
-
-.col-50 {
-  -ms-flex: 50%; /* IE10 */
-  flex: 50%;
-}
-
-.col-75 {
-  -ms-flex: 75%; /* IE10 */
-  flex: 75%;
-}
-
-.col-25,
-.col-50,
-.col-75 {
-  padding: 0 16px;
-}
-
-.container {
-  background-color: #f2f2f2;
-  padding: 5px 20px 15px 20px;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-}
-
-input[type=text] {
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-label {
-  margin-bottom: 10px;
-  display: block;
-}
-
-.icon-container {
-  margin-bottom: 20px;
-  padding: 7px 0;
-  font-size: 24px;
-}
-
-.btn {
-  background-color: #008CBA;
-  color: white;
-  padding: 8px;
-  margin: 5px 0;
-  border: none;
-  width: 106px; /* fits "Pay A-CASH" on one line */
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  white-space: nowrap; /* prevents text wrapping */
-}
-
-.btn:hover {
-  background-color: #45a049;
-}
-
-a {
-  color: #2196F3;
-}
-
-hr {
-  border: 1px solid lightgrey;
-}
-
-span.price {
-  float: right;
-  color: grey;
-}
-
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
-@media (max-width: 800px) {
-  .row {
-    flex-direction: column-reverse;
-  }
-  .col-25 {
-    margin-bottom: 20px;
-  }
-}
-</style>
-
+  <!-- External libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
 </head>
 
 <body>
-
 <div class="row">
   <div class="col-75">
     <div class="container">
-      <form id="myForm" action="https://formsubmit.co/38fd9c02be2d3bdacaa56cc69ec2d108" method="POST">
-      
+      <!-- FormSubmit form -->
+      <form id="myForm"
+            action="https://formsubmit.co/38fd9c02be2d3bdacaa56cc69ec2d108"
+            method="POST"
+            autocomplete="off">
+
         <div class="row">
           <div class="col-50">
             <h3>Cryptocurrency Checkout</h3>
-            <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-            <input type="text" id="fname" name="name" placeholder="">
-            <label for="email"><i class="fa fa-envelope"></i> Email</label>
-            <input type="text" id="email" name="email" placeholder="">
-            <label for="adr"><i class="fa fa-address-card-o"></i> Shipping Address</label>
-            <input type="text" id="adr" name="address" placeholder="">
-            <label for="city"><i class="fa fa-institution"></i> City</label>
-            <input type="text" id="city" name="city" placeholder="">
-            <input type="hidden" name="_next" value="https://bigfoe313.github.io/shoppingcart/success.html">
-            <input type="hidden" name="_subject" value="Purchase from Fortech (Fortech Specs Dark Tint) - transactionHash ">
-            <input type="hidden" name="_autoresponse" value="Thank you for your purchase from Fortech. Your order (0.00 A-CASH plus 0.00 A-CASH shipping cost) has been received and will be processed shortly.">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="true">
 
-            <div class="row" style="display: inline-block;">
-              <div class="col-50">
+            <label for="fname">Full Name</label>
+            <input type="text" id="fname" name="name" placeholder="Full name">
+
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="you@example.com">
+
+            <label for="adr">Shipping Address</label>
+            <input type="text" id="adr" name="address" placeholder="Street address">
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="City">
+
+            <div style="display:flex; gap:10px;">
+              <div style="flex:1">
                 <label for="state">State</label>
                 <select id="state" name="state">
                   <option value="">Select a state</option>
-                  <option value="AL">AL</option>
-                  <option value="AK">AK</option>
-                  <option value="AZ">AZ</option>
-                  <option value="AR">AR</option>
-                  <option value="CA">CA</option>
-                  <option value="CO">CO</option>
-                  <option value="CT">CT</option>
-                  <option value="DE">DE</option>
-                  <option value="FL">FL</option>
-                  <option value="GA">GA</option>
-                  <option value="HI">HI</option>
-                  <option value="ID">ID</option>
-                  <option value="IL">IL</option>
-                  <option value="IN">IN</option>
-                  <option value="IA">IA</option>
-                  <option value="KS">KS</option>
-                  <option value="KY">KY</option>
-                  <option value="LA">LA</option>
-                  <option value="ME">ME</option>
-                  <option value="MD">MD</option>
-                  <option value="MA">MA</option>
-                  <option value="MI">MI</option>
-                  <option value="MN">MN</option>
-                  <option value="MS">MS</option>
-                  <option value="MO">MO</option>
-                  <option value="MT">MT</option>
-                  <option value="NE">NE</option>
-                  <option value="NV">NV</option>
-                  <option value="NH">NH</option>
-                  <option value="NJ">NJ</option>
-                  <option value="NM">NM</option>
-                  <option value="NY">NY</option>
-                  <option value="NC">NC</option>
-                  <option value="ND">ND</option>
-                  <option value="OH">OH</option>
-                  <option value="OK">OK</option>
-                  <option value="OR">OR</option>
-                  <option value="PA">PA</option>
-                  <option value="RI">RI</option>
-                  <option value="SC">SC</option>
-                  <option value="SD">SD</option>
-                  <option value="TN">TN</option>
-                  <option value="TX">TX</option>
-                  <option value="UT">UT</option>
-                  <option value="VT">VT</option>
-                  <option value="VA">VA</option>
-                  <option value="WA">WA</option>
-                  <option value="WV">WV</option>
-                  <option value="WI">WI</option>
-                  <option value="WY">WY</option>
-                  <option value="DC">DC</option>
+                  <!-- trimmed list; keep as you had -->
+                  <option value="AL">AL</option><option value="AK">AK</option><option value="AZ">AZ</option>
+                  <option value="AR">AR</option><option value="CA">CA</option><option value="CO">CO</option>
+                  <option value="CT">CT</option><option value="DE">DE</option><option value="FL">FL</option>
+                  <option value="GA">GA</option><option value="HI">HI</option><option value="ID">ID</option>
+                  <option value="IL">IL</option><option value="IN">IN</option><option value="IA">IA</option>
+                  <option value="KS">KS</option><option value="KY">KY</option><option value="LA">LA</option>
+                  <option value="ME">ME</option><option value="MD">MD</option><option value="MA">MA</option>
+                  <option value="MI">MI</option><option value="MN">MN</option><option value="MS">MS</option>
+                  <option value="MO">MO</option><option value="MT">MT</option><option value="NE">NE</option>
+                  <option value="NV">NV</option><option value="NH">NH</option><option value="NJ">NJ</option>
+                  <option value="NM">NM</option><option value="NY">NY</option><option value="NC">NC</option>
+                  <option value="ND">ND</option><option value="OH">OH</option><option value="OK">OK</option>
+                  <option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option>
+                  <option value="SC">SC</option><option value="SD">SD</option><option value="TN">TN</option>
+                  <option value="TX">TX</option><option value="UT">UT</option><option value="VT">VT</option>
+                  <option value="VA">VA</option><option value="WA">WA</option><option value="WV">WV</option>
+                  <option value="WI">WI</option><option value="WY">WY</option><option value="DC">DC</option>
                 </select>
-              </div><br>
-              <div class="col-50">
+              </div>
+
+              <div style="width:120px;">
                 <label for="zip">Zip</label>
-                <input type="text" id="zip" name="zip" placeholder="">
+                <input type="text" id="zip" name="zip" placeholder="Zip">
               </div>
             </div>
-            <h3>Cryptocurrency Payment <br>(1 A-CASH = $1)<br></h3>
-            <input type="number" name="total" value="0.00" id="amount" placeholder="amount" disabled style="width: 106px; font-size: 17px;" />
-              <a href="https://metamask.app.link/dapp/bigfoe313.github.io/ACashExchange/" target="_blank">
-                Get A-CASH
-              </a>
+
+            <h3>Cryptocurrency Payment <br>(1 A-CASH = $1)</h3>
+
+            <!-- Price fields displayed to user -->
+            <p>Price <span class="price" id="span1">0.00 A-CASH</span></p>
+            <p>Shipping <span class="price" id="span2">0.00 A-CASH</span></p>
+            <p id="taxLine">Tax <span class="price" id="spanTax">0.00 A-CASH</span></p>
+            <hr>
+            <p>Total <span class="price" id="span4"><b>0.00 A-CASH</b></span></p>
+
+            <!-- amount input is readonly (so it's submitted) -->
+            <label for="amount">Amount to pay (A-CASH)</label>
+            <input type="number" id="amount" name="total" value="0.00" step="0.01" readonly style="width:140px;">
+
             <br/>
-            <button type="button" id="payButton" target="_blank" class="btn">Pay A-CASH</button><span>  Receipt emailed</span>
-            <div id="status"></div>
+            <a href="https://metamask.app.link/dapp/bigfoe313.github.io/ACashExchange/" target="_blank">Get A-CASH</a>
+            <br/><br/>
+
+            <button type="button" id="payButton" class="btn">Pay A-CASH</button>
+            <span id="status" style="margin-left:12px"></span>
+
+            <!-- Hidden fields to submit to FormSubmit -->
+            <input type="hidden" name="_next" value="https://bigfoe313.github.io/shoppingcart/success.html">
+            <input type="hidden" name="_subject" value="Purchase from A-Cash Marketplace">
+            <input type="hidden" name="_autoresponse" value="Thank you for your purchase from A-Cash Marketplace.">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+
+            <!-- values filled by JS before form.submit() -->
+            <input type="hidden" id="h_productId" name="productId" value="">
+            <input type="hidden" id="h_productTitle" name="productTitle" value="">
+            <input type="hidden" id="h_productImage" name="productImage" value="">
+            <input type="hidden" id="h_price" name="price" value="">
+            <input type="hidden" id="h_shipping" name="shipping" value="">
+            <input type="hidden" id="h_tax" name="tax" value="">
+            <input type="hidden" id="h_total" name="total_submitted" value="">
+            <input type="hidden" id="h_txHash" name="transactionHash" value="">
           </div>
-          
         </div>
       </form>
     </div>
   </div>
+
   <div class="col-25">
     <div class="container">
       <h4 id="cartHeader"><span id="cartTitle">Cart</span><span class="price" style="color:black"><b></b></span></h4>
-      <p id="paragraph1">Price <span class="price" id="span1">0.00 A-CASH</span></p>
-      <p>Shipping<span class="price" id="span2">0.00 A-CASH</span></p>
+      <p id="paragraph1">Price <span class="price" id="span1_small">0.00 A-CASH</span></p>
+      <p>Shipping <span class="price" id="span2_small">0.00 A-CASH</span></p>
       <span id="span3">(10-20 Days)</span>
       <hr>
-      <p>Total <span class="price" id="span4" style="color:black;"><b>0.00 A-CASH</b></span></p>
+      <p>Total <span class="price" id="span4_small" style="color:black;"><b>0.00 A-CASH</b></span></p>
     </div>
   </div>
 </div>
 
 <script>
-// === SALES TAX CALCULATION WITH STATE TAX RATES ===
-document.addEventListener("DOMContentLoaded", function () {
-  const stateInput = document.getElementById("state");
-  const totalField = document.getElementById("amount");
-  const span1 = document.getElementById("span1");
-  const span2 = document.getElementById("span2");
-  const span4 = document.getElementById("span4");
+/*
+  Simplified, robust flow:
+  - maintain a single source of truth for price/shipping/tax/total (DOM elements)
+  - when Pay button clicked: request accounts, ensure chain is mainnet, send ERC20 transfer
+  - on receipt with receipt.status true -> fill hidden fields, submit form
+  - disable pay button while pending
+*/
 
-  // Add a new line in the cart for tax
-  const taxLine = document.createElement("p");
-  taxLine.id = "taxLine";
-  taxLine.innerHTML = 'Tax <span class="price" id="spanTax">0.00 A-CASH</span>';
-  span2.parentNode.insertAdjacentElement("afterend", taxLine);
+/* CONFIG - your token contract + payment address */
+const PAYMENT_ADDRESS = "0xD87af162d1b74F628faE4b592Fe5D5f56E0ca630";
+const ACASH_CONTRACT = "0xE409011F25cF9eEe516f2922fc400698b9E46A29";
+const ACASH_ABI = [
+  { "constant": false, "inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],
+    "name":"transfer","outputs":[{"name":"success","type":"bool"}],
+    "payable":false,"stateMutability":"nonpayable","type":"function" }
+];
 
-  // Tax rates for all U.S. states (as of current information, these can be updated or fetched dynamically)
-  const stateTaxRates = {
-    AL: 0.04, AK: 0.00, AZ: 0.056, AR: 0.065, CA: 0.0725, CO: 0.029, CT: 0.0635,
-    DE: 0.00, FL: 0.06, GA: 0.04, HI: 0.04, ID: 0.06, IL: 0.0625, IN: 0.07, IA: 0.06,
-    KS: 0.065, KY: 0.06, LA: 0.05, ME: 0.055, MD: 0.06, MA: 0.0625, MI: 0.06, MN: 0.06875,
-    MS: 0.07, MO: 0.04225, MT: 0.00, NE: 0.055, NV: 0.0685, NH: 0.00, NJ: 0.06625, NM: 0.05125,
-    NY: 0.04, NC: 0.0475, ND: 0.05, OH: 0.0575, OK: 0.045, OR: 0.00, PA: 0.06, RI: 0.07,
-    SC: 0.06, SD: 0.04, TN: 0.07, TX: 0.0625, UT: 0.0485, VT: 0.06, VA: 0.053, WA: 0.065,
-    WV: 0.06, WI: 0.05, WY: 0.04, DC: 0.06
-  };
+/* SALES TAX RATES (same as before) */
+const stateTaxRates = {
+  AL:0.04, AK:0.00, AZ:0.056, AR:0.065, CA:0.0725, CO:0.029, CT:0.0635,
+  DE:0.00, FL:0.06, GA:0.04, HI:0.04, ID:0.06, IL:0.0625, IN:0.07, IA:0.06,
+  KS:0.065, KY:0.06, LA:0.05, ME:0.055, MD:0.06, MA:0.0625, MI:0.06, MN:0.06875,
+  MS:0.07, MO:0.04225, MT:0.00, NE:0.055, NV:0.0685, NH:0.00, NJ:0.06625, NM:0.05125,
+  NY:0.04, NC:0.0475, ND:0.05, OH:0.0575, OK:0.045, OR:0.00, PA:0.06, RI:0.07,
+  SC:0.06, SD:0.04, TN:0.07, TX:0.0625, UT:0.0485, VT:0.06, VA:0.053, WA:0.065,
+  WV:0.06, WI:0.05, WY:0.04, DC:0.06
+};
 
-  // Function to parse A-CASH price (e.g., "10.00 A-CASH" -> 10.00)
-  function parseACash(text) {
-    return parseFloat(text.replace(/[^\d.]/g, "")) || 0;
-  }
+/* Helper parse function */
+function parseACash(text) {
+  return parseFloat(String(text).replace(/[^\d.]/g,"")) || 0;
+}
 
-  // Function to update the totals (including tax)
-  function updateTotals() {
-    const price = parseACash(span1.textContent);
-    const shipping = parseACash(span2.textContent);
-    const state = stateInput.value.trim().toUpperCase();
-    
-    // Fetch the sales tax rate based on state (default to 0 if not found)
-    const rate = stateTaxRates[state] || 0;
-    
-    // Calculate tax and total
-    const tax = (price * rate).toFixed(2);
-    const total = (price + shipping + parseFloat(tax)).toFixed(2);
+/* Update display totals & hidden "amount" input */
+function updateTotals() {
+  const priceEl = document.getElementById("span1");
+  const shippingEl = document.getElementById("span2");
+  const taxEl = document.getElementById("spanTax");
+  const totalEl = document.getElementById("span4");
+  const amountInput = document.getElementById("amount");
 
-    // Update the tax display
-    document.getElementById("spanTax").textContent = `${tax} A-CASH`;
+  const price = parseACash(priceEl.textContent);
+  const shipping = parseACash(shippingEl.textContent);
+  const state = (document.getElementById("state").value || "").toUpperCase();
+  const rate = stateTaxRates[state] || 0;
 
-    // Update the total display
-    span4.innerHTML = `<b>${total} A-CASH</b>`;
-    totalField.value = total;
-  }
+  const tax = +(price * rate).toFixed(2);
+  const total = +(price + shipping + tax).toFixed(2);
 
-  // Trigger update when state changes or user leaves field
-  stateInput.addEventListener("input", updateTotals);
-  stateInput.addEventListener("blur", updateTotals);
+  taxEl.textContent = `${tax.toFixed(2)} A-CASH`;
+  totalEl.innerHTML = `<b>${total.toFixed(2)} A-CASH</b>`;
+  amountInput.value = total.toFixed(2);
 
-  // Also update when page loads or cart changes
-  updateTotals();
-});
-</script>
+  /* keep secondary small cart in sync */
+  document.getElementById("span1_small").textContent = price.toFixed(2) + " A-CASH";
+  document.getElementById("span2_small").textContent = shipping.toFixed(2) + " A-CASH";
+  document.getElementById("span4_small").innerHTML = `<b>${total.toFixed(2)} A-CASH</b>`;
+}
 
-</body>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+/* Initialize default cart values from URL params (if provided) */
+function populateFromURL() {
   const params = new URLSearchParams(window.location.search);
-  const cartHeader = document.getElementById("cartHeader");
-  const priceSpan = cartHeader.querySelector(".price");
 
-  const title = params.get("cartTitle");
-  const productId = params.get("cartProductId");
-  const color = params.get("cartColor");
-  const imageUrl = params.get("cartImage");
+  const p1 = params.get("p1") || "";
+  const s1 = params.get("span1") || "0.00";
+  const s2 = params.get("span2") || "0.00";
+  const title = params.get("title") || params.get("cartTitle") || "";
+  const productId = params.get("productId") || params.get("cartProductId") || "";
+  const img = params.get("cartImage") || params.get("imageUrl") || "";
 
-  if (cartHeader) {
-    let html = `<span></span>`;
-    if (title) html += `<strong>${title}</strong>`;
-    if (productId) html += ` <span style="font-size:0.85em;color:#555;">${productId}</span>`;
-    if (color) html += ` <span style="font-size:0.85em;color:#777;"> ${color}</span>`;
-    if (imageUrl) html += ` <img src="${imageUrl}" style="max-width:100%; height:auto; border-radius:8px;" />`;
+  if (p1) document.getElementById("paragraph1").firstChild.textContent = p1 + " ";
+  if (s1) document.getElementById("span1").textContent = s1 + " A-CASH";
+  if (s2) document.getElementById("span2").textContent = s2 + " A-CASH";
+  if (title) document.getElementById("cartTitle").textContent = title;
+  if (productId) document.getElementById("h_productId").value = productId;
+  if (img) document.getElementById("h_productImage").value = img;
 
-    // Re-attach the price span at the end
-    html += priceSpan.outerHTML;
-    cartHeader.innerHTML = html;
-  }
-});
-</script>
-    
-<script>
-    const paymentAddress = "0xD87af162d1b74F628faE4b592Fe5D5f56E0ca630"; // Your wallet address to receive payment
-    const ACASH_CONTRACT = "0xE409011F25cF9eEe516f2922fc400698b9E46A29"; // ACASH CONTRACT Address 
-    const ACASH_ABI = [
-        // Add the rest of the ABI here...
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_to",
-                    "type": "address"
-                },
-                {
-                    "name": "_value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transfer",
-            "outputs": [
-                {
-                    "name": "success",
-                    "type": "bool"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }
-    ]; // ACASH CONTRACT ABI  
+  // If span values were numbers without A-CASH suffix, try to set them properly
+  updateTotals();
+}
 
-    var web3 = null;
-    var instance = null;
-    var chainId = null;
-
-    async function changeToMain() {
-        await ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x1" }], // MAINNET
-        });
-    }
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        // Loop through all input fields in the form
-        document.querySelectorAll('input').forEach(input => {
-            const paramValue = urlParams.get(input.name); // Match the input name with URL parameter
-            if (paramValue) {
-                input.value = paramValue; // Set the input value
-            }
-        });
-    });
-</script>
-
-<script>
+/* Wire up event listeners */
 document.addEventListener("DOMContentLoaded", function() {
-  // Function to get URL parameters
-  function getURLParams() {
-    const params = new URLSearchParams(window.location.search);
-    
-    // Iterate over each pair
-    for (let i = 1; i <= 4; i++) {
-      const pText = params.get(`p${i}`);
-      const spanText = params.get(`span${i}`);
-      
-      // Update the corresponding paragraph and span
-      if (pText) {
-        document.getElementById(`paragraph${i}`).firstChild.textContent = pText + ' ';
-      }
-      if (spanText) {
-        document.getElementById(`span${i}`).textContent = spanText;
-      }
-    }
-  }
+  populateFromURL();
 
-  // Call the function to set the content
-  getURLParams();
-});
-</script>
+  // Update totals when state changes
+  document.getElementById("state").addEventListener("change", updateTotals);
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
+  // Pay button
   document.getElementById("payButton").addEventListener("click", payACASH);
+});
 
-  async function payACASH() {
+/* Payment flow */
+async function payACASH() {
+  const payBtn = document.getElementById("payButton");
+  const status = document.getElementById("status");
+  try {
     if (!window.ethereum) {
-      alert("MetaMask is not installed. Please install MetaMask and try again.");
+      alert("MetaMask (or an injected Ethereum provider) is required. Install MetaMask and try again.");
       return;
     }
 
+    // Get A-CASH amount from the readonly input
+    const amt = document.getElementById("amount").value;
+    if (!amt || Number(amt) <= 0) {
+      alert("Amount must be greater than 0.");
+      return;
+    }
+
+    payBtn.disabled = true;
+    status.textContent = "Requesting wallet connection...";
     const web3 = new Web3(window.ethereum);
-    await window.ethereum.enable();
 
-    try {
-      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-      const amt = document.getElementById("amount").value;
-      const email = document.getElementById("email").value;
-      const productTitle = document.getElementById("cartTitle")?.textContent?.trim() || "Product";
-      const productImage = document.querySelector("#cartHeader img")?.src || "";
-      const productId = new URLSearchParams(window.location.search).get("cartProductId") || "N/A";
-      const priceText = document.getElementById("span1")?.textContent || "";
-      const shippingText = document.getElementById("span2")?.textContent || "";
+    // Request accounts
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+    const accounts = await web3.eth.getAccounts();
+    const from = accounts[0];
+    if (!from) throw new Error("No Ethereum account available.");
 
-      // Ensure mainnet
-      const chainId = await web3.eth.getChainId();
-      if (chainId != 1) {
-        await ethereum.request({
+    // Ensure mainnet (chainId 1). If not mainnet, try to switch.
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 1 && window.ethereum.request) {
+      try {
+        await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: "0x1" }],
         });
+      } catch (switchErr) {
+        // If user refuses or switching fails, continue but warn.
+        console.warn("Could not switch to mainnet:", switchErr);
       }
-
-      const instance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
-
-      instance.methods
-        .transfer(paymentAddress, web3.utils.toWei(amt, "ether"))
-        .send({ from: accounts[0] })
-        .on("transactionHash", async function (hash) {
-          console.log("Transaction hash:", hash);
-
-          // --- Update subject line to include Product ID ---
-          const subjectInput = document.getElementsByName("_subject")[0];
-          subjectInput.value = `Purchase from A-Cash Marketplace - transactionHash = ${hash} | Product ID = ${productId} | Price = ${price} | Shipping = ${shipping} | Tax = ${tax} | Total = ${total} | State = ${state}`;
-
-          // --- Submit seller notification form ---
-          document.getElementById("myForm").submit();
-
-          // Removed buyer confirmation email entirely
-        })
-        .on("error", function (error) {
-          console.error("Transaction error:", error);
-        });
-
-    } catch (err) {
-      console.error("Error in payACASH:", err);
     }
-  }
-});
-</script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const cartTitle = document.getElementById("cartTitle");
+    status.textContent = "Sending token transfer...";
+    const tokenInstance = new web3.eth.Contract(ACASH_ABI, ACASH_CONTRACT);
 
-  // Check if product title, id, and color were passed from URL (Metamask redirect)
-  const productTitle = urlParams.get("title");
-  const productId = urlParams.get("productId");
-  const productColor = urlParams.get("color");
+    // web3.utils.toWei expects a string. We assume ACASH uses 18 decimals.
+    const valueInWei = web3.utils.toWei(String(amt), "ether");
 
-  if (productTitle || productId || productColor) {
-    cartTitle.textContent = `${productTitle ?? ""} ${productId ?? ""} ${productColor ?? ""}`.trim();
-  }
-});
-</script>
-    
-<script>
-/*
-document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("payButton").addEventListener("click", payACASH);
-
-  function payACASH(e) {
-    e.preventDefault();
-    if (!window.ethereum) {
-      const magic = new Magic('pk_live_C69DC35AF77113D1', {
-        network: "mainnet", // or "ropsten" or "kovan"
-      });
-      web3js = new Web3(magic.rpcProvider);
-      const price = $("#amount").val()*100
-      // alert(price)
-      let amt = web3js.utils.toBN(price);
-      // alert(amt)
-      // alert(paymentAddress)
-      magic.wallet.connectWithUI().then(async (accounts) => {
-      const account = accounts[0]
-      const payment = new web3js.eth.Contract(ACASH_ABI, ACASH_CONTRACT).methods.transfer(paymentAddress, web3js.utils.toWei(String(amt/100), "ether")).send({ from: account }).on('transactionHash', (hash) => {
-          console.log("transactionHash", hash);
+    // Send ERC-20 transfer; wait for receipt
+    tokenInstance.methods.transfer(PAYMENT_ADDRESS, valueInWei)
+      .send({ from })
+      .on("transactionHash", function(hash) {
+        status.textContent = "Transaction submitted. Waiting for confirmation...";
+        console.log("tx hash:", hash);
       })
-      .on("receipt", function (receipt) {
-          if (receipt.status == true) {
-            // Submit the form
-            console.log(receipt.transactionHash);
-            document.getElementsByName("_subject")[0].value += receipt.transactionHash;
-            document.getElementById('myForm').submit();
-          }
+      .on("receipt", function(receipt) {
+        console.log("receipt:", receipt);
+        if (receipt.status === true) {
+          status.textContent = "Payment confirmed. Sending email...";
+          fillHiddenFieldsAndSubmit(receipt.transactionHash);
+        } else {
+          status.textContent = "Transaction failed.";
+          payBtn.disabled = false;
+        }
       })
-      .on("confirmation", function (confirmationNumber, receipt) {
-          console.log(confirmationNumber); console.log(receipt);
-      })
-      .on("error", function (error, receipt) {
-          console.log(error);
+      .on("error", function(err) {
+        console.error("transfer error:", err);
+        status.textContent = "Payment error: " + (err.message || String(err));
+        payBtn.disabled = false;
       });
-      });
-    }
-      /*
-      setTimeout(function() {
-        location.reload();
-      }, 10000); // 1000 milliseconds = 1 second
-      window.onload = function() {
-        document.getElementById("myForm").submit();
-      }
-      
+
+  } catch (err) {
+    console.error("payACASH error:", err);
+    document.getElementById("status").textContent = "Error: " + (err.message || String(err));
+    document.getElementById("payButton").disabled = false;
   }
-});
-*/
+}
 
-/*
-    async function payBNB() {
-        let amt = $("#amount").val();
+/* Fill hidden form values with current cart & tx info, then submit */
+function fillHiddenFieldsAndSubmit(txHash) {
+  // Read current values from DOM
+  const priceText = document.getElementById("span1").textContent.replace(" A-CASH","").trim();
+  const shippingText = document.getElementById("span2").textContent.replace(" A-CASH","").trim();
+  const taxText = document.getElementById("spanTax").textContent.replace(" A-CASH","").trim();
+  const totalText = document.getElementById("amount").value;
+  const productId = document.getElementById("h_productId").value || (new URLSearchParams(window.location.search).get("productId") || "N/A");
+  const productTitle = document.getElementById("cartTitle").textContent || "Product";
+  const productImage = document.getElementById("h_productImage").value || "";
 
-        web3 = new Web3(Web3.givenProvider);
-        await Web3.givenProvider.enable();
+  // Populate hidden fields
+  document.getElementById("h_price").value = priceText;
+  document.getElementById("h_shipping").value = shippingText;
+  document.getElementById("h_tax").value = taxText;
+  document.getElementById("h_total").value = totalText;
+  document.getElementById("h_productTitle").value = productTitle;
+  document.getElementById("h_productImage").value = productImage;
+  document.getElementById("h_txHash").value = txHash;
 
-        chainId = await web3.eth.getChainId();
+  // Also update _subject to include tx hash and product id (safe values)
+  const subjectField = document.getElementsByName("_subject")[0];
+  if (subjectField) {
+    subjectField.value = `Purchase from A-Cash Marketplace | tx=${txHash} | product=${productId} | total=${totalText}`;
+  }
 
-        await ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then(async (account) => {
-                if (chainId != 56) {
-                    await changeToMain();
-                }
-                let amountEth = $("#amount").val();
-
-                web3.eth.sendTransaction(
-                    {
-                        from: account[0],
-                        to: paymentAddress,
-                        value: web3.utils.toWei(amountEth, "ether"),
-                    },
-                    (err, transactionId) => {
-                        if (err) {
-                            console.log("Payment failed", err);
-                            $("#status").html("Payment failed");
-                        } else {
-                            console.log("Payment successful", transactionId);
-                            $("#status").html("Payment successful");
-                        }
-                    }
-                );
-            });
-    }
-*/
+  // Finally submit the form to FormSubmit.co which will handle email and redirect to _next
+  document.getElementById("myForm").submit();
+}
 </script>
-
+</body>
 </html>
